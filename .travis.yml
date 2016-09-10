@@ -11,5 +11,5 @@ before_install:
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" registry.heroku.com;
-    docker push benjamin.carothers13@ncf.edu/victors-garden;
+    docker push btcrs/victor;
     fi
