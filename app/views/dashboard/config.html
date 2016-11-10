@@ -1,0 +1,19 @@
+<div>
+    <a ui-sref="overview" class="pull-right btn btn-primary btn-outline btn-rounded">Back to Overview</a>
+    <h2>Configuration</h2>
+    <div class="jumbotron report-container">
+        <div class="container">
+            <div simple-grid="gridConfig"></div>
+            <!-- <div style="text-align:center"> -->
+                Page:
+                {{ gridConfig.options.pageNum + 1 }}
+                    <button type="button" class="btn btn-sm btn-primary" ng-click="movePage(-1)">
+                        &lt; Prev
+                    </button>
+                    <button type="button" class="btn btn-sm btn-primary" ng-click="movePage(1)">
+                        &gt; Next
+                    </button>
+            <!-- </div> -->
+        </div>
+    </div>
+</div>
