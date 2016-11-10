@@ -1,5 +1,0 @@
-{
-  "name": "Victor",
-  "description": "heroku-docker",
-  "image": "heroku/nodejs"
-}
