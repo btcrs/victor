@@ -56,3 +56,8 @@
 .login-page .form-content {
    padding: 40px 0;
 }
+
+.user-avatar {
+    width: 125px;
+    height: 125px;
+}
