@@ -9,6 +9,9 @@ angular.module('myApp.view1', ['ngRoute'])
   });
 }])
 
-.controller('View1Ctrl', [function() {
-
-}]);
+.controller('LoginCtrl', function($scope, $location) {
+  $scope.submit = function() {
+   $location.path('/dashboard');
+   return false;
+ };
+});
