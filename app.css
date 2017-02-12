@@ -47,7 +47,7 @@
     height: 100%;
     overflow: auto;
     background:  #54b34f;
-    background-image: url('../images/lettuce.jpg');
+    background-image: url('images/lettuce.jpg');
     text-align: center;
     color: #fff;
     padding: 3em;
