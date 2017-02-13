@@ -18,7 +18,7 @@ angular.module('victor.login', ['ngRoute'])
   };
 
   $scope.login = function(provider){
-     $http.get(authenticationEndpoint + '/signin/' + provider)
+     $http.get(authenticationEndpoint + 'signin/' + provider)
   }
 
 });
