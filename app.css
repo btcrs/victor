@@ -11,6 +11,11 @@
   background-color: lightgrey;
 }
 
+
+.graph-item {
+    margin-bottom: 25px;
+}
+
 /* app css stylesheet */
 
 .menu {

@@ -1,20 +1,26 @@
 <div class="login-page">
     <div class="container">
         <div class="card card-container">
+          <form class="form-horizontal">
             <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
             <p id="profile-name" class="profile-name-card"></p>
-            <form class="form-signin">
-                <span id="reauth-email" class="reauth-email"></span>
-                <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-                <button class="btn btn-raised btn-primary" type="submit">Sign In</button>
-            </form>
+
+            <div class="btn-group-vertical">
             <button class="btn btn-info btn-raised" ng-click='login("facebook")'>
-              <span class="fa fa-facebook"></span>
+              <span class="fa fa-facebook"> Login With Facebook</span>
             </button>
+
             <button class="btn btn-danger btn-raised" ng-click='login("google")'>
-              <span class="fa fa-google"></span> 
+              <span class="fa fa-google"> Login With Google</span> 
             </button>
+
+            <button class="btn btn-default btn-raised" ng-click='noLogin()'>
+                <span class="fa fa-pagelines"> View Dashboard</span>
+            </button>
+            </div>
+
+           </form>
+
         </div>
     </div>
 </div>
