@@ -9,16 +9,16 @@ angular.module('victor.login', ['ngRoute'])
   });
 }])
 
-.controller('LoginController', function($scope, $http, $location) {
+.controller('LoginController', function($scope, $location) {
 
-  var authenticationEndpoint = "https://43kmoq1cf2.execute-api.us-east-1.amazonaws.com/dev/authentication/"
+  $scope.authenticationEndpoint = "https://43kmoq1cf2.execute-api.us-east-1.amazonaws.com/dev/authentication/"
 
-  $scope.submit = function() {
+  $scope.noLogin = function() {
      $location.path('/dashboard');
   };
 
   $scope.login = function(provider){
-     $http.get(authenticationEndpoint + 'signin/' + provider)
+     window.location = ($scope.authenticationEndpoint + 'signin/' + provider)
   }
 
 });
