@@ -2,6 +2,8 @@
 
 angular.module('victor', [
   'ngRoute',
+  'angular-chartist',
+  'angularMoment',
   'victor.login',
   'victor.dashboard',
 ]).
