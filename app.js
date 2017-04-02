@@ -2,7 +2,7 @@
 
 angular.module('victor', [
   'ngRoute',
-  'angular-chartist',
+  // 'angular-chartist',
   'angularMoment',
   'victor.login',
   'victor.dashboard',

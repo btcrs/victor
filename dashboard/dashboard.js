@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('victor.dashboard', ['ngRoute', 'angular-chartist', 'angularMoment'])
+angular.module('victor.dashboard', ['ngRoute', 'metricsgraphics', 'angular.filter', 'angularMoment'])
 
   .config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/dashboard', {
@@ -13,58 +13,64 @@ angular.module('victor.dashboard', ['ngRoute', 'angular-chartist', 'angularMomen
 
     var vm = this
     vm.measurements = {} 
+    vm.charts = {}
+    
 
     $http.get('https://43kmoq1cf2.execute-api.us-east-1.amazonaws.com/dev/datum').then(function(data) {
-      console.log(data)
-      var count = 0
-
-      var data_item = {
-        labels: [],
-        series: []
-      };
 
       var parameters = []
       angular.forEach(data.data, function(item) {
-          //parameter.push(moment(item.date).format('MMM D'))
           parameters.push(item.parameter)
       })
 
       angular.forEach(new Set(parameters), function(item) {
-          console.log(item)
-         vm.measurements[item] = {labels: [], series: [[]]} 
+         vm.measurements[item] = []
       })
 
+      var colorSplit = {'red': [], 'blue': [], 'green':[], 'clear':[]}
+      var colorConcatenated = []
       angular.forEach(data.data, function(item) {
-        if(String(item.paramter) === "color"){
-          console.log(item.value.split(/(\s+)/).filter( function(e) { return e.trim().length > 0; }))
+        if(new String(item.parameter).valueOf() == new String("color").valueOf()){
+          var colors = (item.value.split(/(\s+)/).filter( function(e) { return e.trim().length > 0; }))
+          angular.forEach(colors, function(color) {
+              var value = color.split('=');
+              var reading = {"value": value[1], "date":moment(item.createdAt).toDate()}
+              colorSplit[value[0]].push(reading)
+          })
         }
         else if(isNumeric(item.value)){
-          var reading = {"value": item.value, "time":moment(item.createdAt).format('MM DD h:mm:ss')}
-          vm.measurements[item.parameter].labels.push(reading.time)
-          vm.measurements[item.parameter].series[0].push(reading.value)
+          var reading = {"value": item.value, "date":moment(item.createdAt).toDate()}
+          vm.measurements[item.parameter].push(reading)
         }
-        else{ }
+        else{
+            console.log();
+        }
       })
-      console.log(vm.measurements)
+      angular.forEach(colorSplit, function(color){
+          colorConcatenated.push(color)
+      })
+      vm.measurements['color'] = colorConcatenated
 
-      angular.forEach(measurements, function(item) {
-        item.labels = item.labels.slice(Math.max(arr.length - 15, 1))
-        item.series[0]= item.series[0].slice(Math.max(arr.length - 15, 1))
+      angular.forEach(vm.measurements, function(item, key) {
+
+        vm.charts[key] = ({
+          data: item.slice(Math.max(item.length - 10, 1)),
+          title: key,
+          interpolate: d3.curveMonotoneX,
+          color: '#f1367e',
+          width: 650,
+          height: 200,
+          right: 40,
+          x_accessor: 'date',
+          y_accessor: 'value'
+        })
       })
     })
+
 
    function isNumeric(n) {
      return !isNaN(parseFloat(n)) && isFinite(n);
    }
-
-    vm.dat = {labels: [''], series: [[0]]}
-
-    vm.chartOptions = {
-      axisX: {
-        divisor: 4
-      },
-      showArea: true,
-    };
 
     var apiEntry = 'https://43kmoq1cf2.execute-api.us-east-1.amazonaws.com/dev/datum'
 
