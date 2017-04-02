@@ -12,49 +12,50 @@ angular.module('victor.dashboard', ['ngRoute', 'angular-chartist', 'angularMomen
   .controller('DashboardController', function($scope, $interval, $timeout, $http, moment) {
 
     var vm = this
-    vm.chartData = []
+    vm.measurements = {} 
 
-    $http.get('https://raw.githubusercontent.com/mozilla/metrics-graphics/master/examples/data/fake_users1.json').then(function(data) {
+    $http.get('https://43kmoq1cf2.execute-api.us-east-1.amazonaws.com/dev/datum').then(function(data) {
+      console.log(data)
       var count = 0
 
       var data_item = {
         labels: [],
         series: []
       };
-      var row = []
-      var series_tmp = []
+
+      var parameters = []
+      angular.forEach(data.data, function(item) {
+          //parameter.push(moment(item.date).format('MMM D'))
+          parameters.push(item.parameter)
+      })
+
+      angular.forEach(new Set(parameters), function(item) {
+          console.log(item)
+         vm.measurements[item] = {labels: [], series: [[]]} 
+      })
 
       angular.forEach(data.data, function(item) {
-        count += 1
-        if (count < 15) {
-          series_tmp.push(item.value / 100000)
-          data_item.labels.push(moment(item.date).format('MMM D'))
-        } else if (row.length < 3) {
-          data_item.series.push(series_tmp)
-          series_tmp = []
-          row.push(data_item)
-          data_item = {
-            labels: [],
-            series: [[]]
-          };
-          count = 0
-        } else {
-          data_item.series.push(series_tmp)
-          series_tmp = []
-          vm.chartData.push(row)
-          row = []
-          row.push(data_item)
-          data_item = {
-            labels: [],
-            series: [[]]
-          };
-          count = 0
+        if(String(item.paramter) === "color"){
+          console.log(item.value.split(/(\s+)/).filter( function(e) { return e.trim().length > 0; }))
         }
+        else if(isNumeric(item.value)){
+          var reading = {"value": item.value, "time":moment(item.createdAt).format('MM DD h:mm:ss')}
+          vm.measurements[item.parameter].labels.push(reading.time)
+          vm.measurements[item.parameter].series[0].push(reading.value)
+        }
+        else{ }
       })
-      console.log(vm.chartData)
-    vm.dat = vm.chartData[1][1]
-    console.log(vm.dat)
+      console.log(vm.measurements)
+
+      angular.forEach(measurements, function(item) {
+        item.labels = item.labels.slice(Math.max(arr.length - 15, 1))
+        item.series[0]= item.series[0].slice(Math.max(arr.length - 15, 1))
+      })
     })
+
+   function isNumeric(n) {
+     return !isNaN(parseFloat(n)) && isFinite(n);
+   }
 
     vm.dat = {labels: [''], series: [[0]]}
 
