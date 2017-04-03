@@ -4,7 +4,8 @@
                         <div ng-repeat="item in row" class="col-md-6">
               <chart data="item.data" 
                      options="item"
-                     ng-if="item.data">
+                     ng-if="item.data"
+                     convert-date-field="{{date}}">
                </chart>
     </div>
 </div>

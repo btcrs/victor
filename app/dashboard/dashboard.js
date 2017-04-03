@@ -14,9 +14,9 @@ angular.module('victor.dashboard', ['ngRoute', 'metricsgraphics', 'angular.filte
     var vm = this
     vm.measurements = {} 
     vm.charts = {}
-    
 
-    $http.get('https://43kmoq1cf2.execute-api.us-east-1.amazonaws.com/dev/datum').then(function(data) {
+    $http.get('https://aadrsu3hne.execute-api.us-east-1.amazonaws.com/dev/datum').then(function(data) {
+        console.log(data);
 
       var parameters = []
       angular.forEach(data.data, function(item) {
@@ -29,22 +29,23 @@ angular.module('victor.dashboard', ['ngRoute', 'metricsgraphics', 'angular.filte
 
       var colorSplit = {'red': [], 'blue': [], 'green':[], 'clear':[]}
       var colorConcatenated = []
+
       angular.forEach(data.data, function(item) {
+        var d = new Date(item.createdAt)
+
         if(new String(item.parameter).valueOf() == new String("color").valueOf()){
           var colors = (item.value.split(/(\s+)/).filter( function(e) { return e.trim().length > 0; }))
           angular.forEach(colors, function(color) {
               var value = color.split('=');
-              var reading = {"value": value[1], "date":moment(item.createdAt).toDate()}
+              var reading = {"value": value[1], "date": d}
               colorSplit[value[0]].push(reading)
           })
         }
         else if(isNumeric(item.value)){
-          var reading = {"value": item.value, "date":moment(item.createdAt).toDate()}
+          var reading = {"value": item.value, "date": d}
           vm.measurements[item.parameter].push(reading)
         }
-        else{
-            console.log();
-        }
+        else{ console.log(new Date(item.createdAt).toString()); }
       })
       angular.forEach(colorSplit, function(color){
           colorConcatenated.push(color)
@@ -54,7 +55,7 @@ angular.module('victor.dashboard', ['ngRoute', 'metricsgraphics', 'angular.filte
       angular.forEach(vm.measurements, function(item, key) {
 
         vm.charts[key] = ({
-          data: item.slice(Math.max(item.length - 10, 1)),
+          data: item,
           title: key,
           interpolate: d3.curveMonotoneX,
           color: '#f1367e',
