@@ -2,9 +2,9 @@
 
 angular.module('victor', [
   'ngRoute',
-  // 'angular-chartist',
   'angularMoment',
   'victor.login',
+  'victor.control',
   'victor.dashboard',
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {

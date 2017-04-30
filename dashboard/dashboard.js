@@ -14,7 +14,10 @@ angular.module('victor.dashboard', ['ngRoute', 'metricsgraphics', 'angular.filte
     var vm = this
     vm.measurements = {} 
     vm.charts = {}
+    grabData();
+    $interval(grabData, 60000);
 
+    function grabData(){
     $http.get('https://aadrsu3hne.execute-api.us-east-1.amazonaws.com/dev/datum').then(function(data) {
         console.log(data);
 
@@ -56,7 +59,7 @@ angular.module('victor.dashboard', ['ngRoute', 'metricsgraphics', 'angular.filte
 
         vm.charts[key] = ({
           data: item,
-          title: key,
+          title: key.toUpperCase(),
           interpolate: d3.curveMonotoneX,
           color: '#f1367e',
           width: 650,
@@ -66,44 +69,45 @@ angular.module('victor.dashboard', ['ngRoute', 'metricsgraphics', 'angular.filte
           y_accessor: 'value'
         })
       })
-    })
+    })}
+
 
 
    function isNumeric(n) {
      return !isNaN(parseFloat(n)) && isFinite(n);
    }
 
-    var apiEntry = 'https://43kmoq1cf2.execute-api.us-east-1.amazonaws.com/dev/datum'
+    // var apiEntry = 'https://43kmoq1cf2.execute-api.us-east-1.amazonaws.com/dev/datum'
 
-    $http({
-      method: 'GET',
-      url: apiEntry,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then(function successCallback(response) {
-      $scope.data = response
-    }, function errorCallback(response) {
-      console.log(response)
-    });
+    // $http({
+    //   method: 'GET',
+    //   url: apiEntry,
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   }
+    // }).then(function successCallback(response) {
+    //   $scope.data = response
+    // }, function errorCallback(response) {
+    //   console.log(response)
+    // });
 
-    var config = {
-      headers: {
-        'Authorization': 'Basic'
-      }
-    }
+    // var config = {
+    //   headers: {
+    //     'Authorization': 'Basic'
+    //   }
+    // }
 
-    var entry = {
-      parameter: "temperature",
-      value: "25.2",
-    }
+    // var entry = {
+    //   parameter: "temperature",
+    //   value: "25.2",
+    // }
 
-    if ($scope.authorized) {
-      $http.post(apiEntry, data, config).then(function successCallback(response) {
-        console.log(response)
-      }, function errorCallback(response) {
-        console.log(response)
-      });
-    }
+    // if ($scope.authorized) {
+    //   $http.post(apiEntry, data, config).then(function successCallback(response) {
+    //     console.log(response)
+    //   }, function errorCallback(response) {
+    //     console.log(response)
+    //   });
+    // }
 
   });
